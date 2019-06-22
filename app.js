@@ -1,41 +1,67 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const APP_SECRET = 'ef009df9ebfbe491c99368e310b1c579';
+const VALIDATION_TOKEN = 'Huy741993';
+const PAGE_ACCESS_TOKEN = 'EAAiMAXLTZBN4BAJJsBZCjnPGklAWB2RomhmqETwPqqUyoJqi9G2$
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var http = require('http');
+var bodyParser = require('body-parser');
+var express = require('express');
 
 var app = express();
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+var server = http.createServer(app);
+var request = require("request");
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.get('/', (req, res) => {
+  res.send("Home page. Server running okay.");
+});
+app.get('/webhook', function(req, res) { // Đây là path để validate tooken bên $
+  if (req.query['hub.verify_token'] === VALIDATION_TOKEN) {
+    res.send(req.query['hub.challenge']);
+  }
+  res.send('Error, wrong validation token');
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.post('/webhook', function(req, res) { // Phần sử lý tin nhắn của người dùng$
+  var entries = req.body.entry;
+  for (var entry of entries) {
+    var messaging = entry.messaging;
+    for (var message of messaging) {
+      var senderId = message.sender.id;
+      if (message.message) {
+        if (message.message.text) {
+          var text = message.message.text;
+          sendMessage(senderId, "Hello!! I'm a bot. Your message: " + text);
+        }
+      }
+    }
+  }
+  res.status(200).send("OK");
 });
 
-module.exports = app;
+// Đây là function dùng api của facebook để gửi tin nhắn
+function sendMessage(senderId, message) {
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {
+      access_token: PAGE_ACCESS_TOKEN,
+    },
+    method: 'POST',
+    json: {
+      recipient: {
+        id: senderId
+      },
+      message: {
+        text: message
+      },
+    }
+  });
+}
+
+app.set('port', process.env.PORT || 5000);
+app.set('ip', process.env.IP || "0.0.0.0");
+
+server.listen(app.get('port'), app.get('ip'), function() {
+  console.log("Chat bot server listening at %s:%d ", app.get('ip'), app.get('po$
+});
