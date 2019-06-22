@@ -1,6 +1,6 @@
 const APP_SECRET = 'ef009df9ebfbe491c99368e310b1c579';
 const VALIDATION_TOKEN = 'Huy741993';
-const PAGE_ACCESS_TOKEN = 'EAAiMAXLTZBN4BAJJsBZCjnPGklAWB2RomhmqETwPqqUyoJqi9G2$
+const PAGE_ACCESS_TOKEN = 'EAAiMAXLTZBN4BAJJsBZCjnPGklAWB2RomhmqETwPqqUyoJqi9G2$'
 
 var http = require('http');
 var bodyParser = require('body-parser');
