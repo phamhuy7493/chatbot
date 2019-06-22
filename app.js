@@ -1,6 +1,6 @@
 const APP_SECRET = 'ef009df9ebfbe491c99368e310b1c579';
 const VALIDATION_TOKEN = 'Huy741993';
-const PAGE_ACCESS_TOKEN = 'EAAiMAXLTZBN4BAJJsBZCjnPGklAWB2RomhmqETwPqqUyoJqi9G2$'
+const PAGE_ACCESS_TOKEN = 'EAAiMAXLTZBN4BALfcZCJxIvrJVZBt4YvGRFRjpQYpKZAxkZBySFZCH5gAf5Up2WyPQotDcS5eRNtyJrryivZC2wrey2gPdehAnz7rPMrNUvuqFldpPmmDsGTnQ5t7ikqxwKZBia5E9o5xeN4YZAAG6Xo6eNjkpjdCV4esvRmgufv5CV0f2h6DJvK2';
 
 var http = require('http');
 var bodyParser = require('body-parser');
@@ -47,7 +47,7 @@ function sendMessage(senderId, message) {
     qs: {
       access_token: PAGE_ACCESS_TOKEN,
     },
-    method: 'GET',
+    method: 'POST',
     json: {
       recipient: {
         id: senderId
