@@ -47,7 +47,7 @@ function sendMessage(senderId, message) {
     qs: {
       access_token: PAGE_ACCESS_TOKEN,
     },
-    method: 'POST',
+    method: 'GET',
     json: {
       recipient: {
         id: senderId
